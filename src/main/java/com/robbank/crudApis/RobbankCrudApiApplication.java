@@ -1,4 +1,4 @@
-package com.airconsole.reservation;
+package com.robbank.crudApis;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

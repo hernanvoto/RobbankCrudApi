@@ -1,7 +1,6 @@
 package com.robbank.crudApis.model;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,17 +20,17 @@ public class Statement {
 //    private T account;
     private LocalDate starDate;
     private LocalDate endDate;
-    private List<Transaction> transactions;
+//    private List<Transaction> transactions;
     @ManyToOne
     @JoinColumn
     private Account account;
 
-    public Statement(LocalDate starDate, LocalDate endDate, List<Transaction> transactions) {
+    public Statement(LocalDate starDate, LocalDate endDate/* , List<Transaction> transactions */) {
 
         super();
         this.starDate = starDate;
         this.endDate = endDate;
-        this.transactions = transactions;
+//        this.transactions = transactions;
     }
 
     public void setAccount(Account account) {
@@ -69,14 +68,14 @@ public class Statement {
         this.endDate = endDate;
     }
 
-    public List<Transaction> getTransactions() {
-
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-
-        this.transactions = transactions;
-    }
+//    public List<Transaction> getTransactions() {
+//
+//        return transactions;
+//    }
+//
+//    public void setTransactions(List<Transaction> transactions) {
+//
+//        this.transactions = transactions;
+//    }
 
 }

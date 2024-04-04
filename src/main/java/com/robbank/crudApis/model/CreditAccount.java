@@ -7,42 +7,53 @@ public class CreditAccount extends Account {
 
     private static final long serialVersionUID = -2202745422583452572L;
 
-//    private String cardType;
-//    private String cardLevel;
-//    private double creditLimit;
-//
-//    public CreditAccount(final String accountName) {
-//
-//        super(accountName);
-//    }
+    private CardType cardType;
+    private CardLevel cardLevel;
+    private double creditLimit;
 
-//    public String getCardType() {
-//
-//        return cardType;
-//    }
-//
-//    public void setCardType(String cardType) {
-//
-//        this.cardType = cardType;
-//    }
-//
-//    public String getCardLevel() {
-//
-//        return cardLevel;
-//    }
-//
-//    public void setCardLevel(String cardLevel) {
-//
-//        this.cardLevel = cardLevel;
-//    }
-//
-//    public double getCreditLimit() {
-//
-//        return creditLimit;
-//    }
-//
-//    public void setCreditLimit(double creditLimit) {
-//
-//        this.creditLimit = creditLimit;
-//    }
+    public enum CardType {
+        VISA, MASTERCARD, AMERICAN_EXPRESS
+    }
+
+    public enum CardLevel {
+        STANDARD, GOLD, PLATINUM, BLACK
+
+    }
+
+    public CreditAccount(final String accountName, final CardType cardType, final CardLevel cardLevel) {
+
+        super(accountName);
+        this.setCardType(cardType);
+        this.setCardLevel(cardLevel);
+    }
+
+    public double getCreditLimit() {
+
+        return creditLimit;
+    }
+
+    public void setCreditLimit(double creditLimit) {
+
+        this.creditLimit = creditLimit;
+    }
+
+    public CardType getCardType() {
+
+        return cardType;
+    }
+
+    public void setCardType(CardType cardType) {
+
+        this.cardType = cardType;
+    }
+
+    public CardLevel getCardLevel() {
+
+        return cardLevel;
+    }
+
+    public void setCardLevel(CardLevel cardLevel) {
+
+        this.cardLevel = cardLevel;
+    }
 }

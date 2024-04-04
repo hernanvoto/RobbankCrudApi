@@ -1,7 +1,5 @@
 package com.robbank.crudApis.model;
 
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +16,6 @@ public class User {
     private long id;
     private String username;
     private String password;
-    private List<Role> roles;
+//    private List<Role> roles;
 
 }

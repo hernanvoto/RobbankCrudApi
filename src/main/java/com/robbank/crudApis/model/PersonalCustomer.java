@@ -5,18 +5,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 
-@Entity @Table
+@Entity
 public class PersonalCustomer extends Customer {
-
-    private String firstName;
-    private String lastName;
 
     @Id
     @SequenceGenerator(name = "customer_sequence", sequenceName = "customer_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
     private long id;
+    private String firstName;
+    private String lastName;
+
+    public PersonalCustomer(String firstName, String lastName) {
+
+        super();
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public long getId() {
 

@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 @Entity @Table
 public class Payee implements Serializable {
 
+    private static final long serialVersionUID = -502920575628338651L;
     @Id
     @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")

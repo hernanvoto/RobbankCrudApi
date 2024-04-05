@@ -3,19 +3,34 @@ package com.robbank.crudApis.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.robbank.crudApis.model.CreditAccount.CardLevel;
 import com.robbank.crudApis.model.CreditAccount.CardType;
+import com.robbank.crudApis.services.AccountNumberGeneratorService;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Bank {
+
+    /**
+     * This is undersired but I can't figure out a way to do this somewhere else
+     * except hardwire the autoincrement in the database in the Account table Where
+     * could accountNumberGeneratorService be invoked to generate the account
+     * numbeR???
+     */
+    @Autowired
+    @Transient
+    AccountNumberGeneratorService accountNumberGeneratorService;
 
     @Id
     @SequenceGenerator(name = "bank_sequence", sequenceName = "bank_sequence", allocationSize = 1)
@@ -23,6 +38,7 @@ public class Bank {
     private Long id;
 
     private String name;
+    @Column(nullable = false)
     private String bsb;
 
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
@@ -33,6 +49,14 @@ public class Bank {
 
     public enum AccountType {
         SAVINGS, CREDIT
+    }
+
+    /**
+     * Required for unit testing org.springframework.orm.jpa.JpaSystemException: No
+     * default constructor for entity '
+     */
+    public Bank() {
+
     }
 
     public Bank(final String name, final String bsb) {
@@ -109,18 +133,6 @@ public class Bank {
         return this;
     }
 
-    public Account createSavingsAccount(
-            final Customer customer,
-            final String accountName,
-            final double interestRate,
-            final double initialDeposit
-    ) {
-
-        Account account = new SavingsAccount(accountName, interestRate, initialDeposit);
-        addAccount(customer, account);
-        return account;
-    }
-
     public Account createCreditAccount(
             final Customer customer,
             final String accountName,
@@ -129,10 +141,18 @@ public class Bank {
     ) {
 
         Account account = new CreditAccount(accountName, cardType, cardLevel);
+        account.setAccountNo(accountNumberGeneratorService.generateAccountNumber());
         addAccount(customer, account);
         return account;
     }
 
+    /**
+     * wondering if it is clear bank adds account and how would this be told to
+     * users
+     * 
+     * @param customer
+     * @param account
+     */
     public void addAccount(Customer customer, Account account) {
 
         if (customer != null && account != null) {
@@ -151,9 +171,9 @@ public class Bank {
         }
     }
 
-    void removeAccount(final long id) {
+    public void removeAccount(final Account account) {
 
-        accounts.remove(id);
+        accounts.remove(account);
 
     }
 }

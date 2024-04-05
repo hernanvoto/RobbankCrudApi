@@ -5,10 +5,16 @@ import jakarta.persistence.Entity;
 @Entity
 public class SavingsAccount extends Account {
 
-    private static final long serialVersionUID = -6957210575503721514L;
-
     private double interestRate;
     private double minimumBalance;
+
+    /**
+     * Required for unit testing org.springframework.orm.jpa.JpaSystemException: No
+     * default constructor for entity '
+     */
+    public SavingsAccount() {
+
+    }
 
     public SavingsAccount(final String accountName, final double interestRate, final double minimumBalance) {
 

@@ -1,8 +1,6 @@
 package com.robbank.crudApis.model;
 
-import java.io.Serializable;
-
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,43 +20,53 @@ import jakarta.persistence.SequenceGenerator;
  * Could not determine recommended JdbcType for Java type
  * 'com.robbank.crudApis.model.Account'
  */
-public class Account implements Serializable {
-
-    private static final long serialVersionUID = 8448768907639099873L;
+public abstract class Account {
 
     @Id
     @SequenceGenerator(name = "account_sequence", sequenceName = "account_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_sequence")
     private long id;
 
-    @SequenceGenerator(name = "accountNo_sequence", sequenceName = "accountNo_sequence", allocationSize = 1)
-    private int accountNo;
+    @Column(nullable = false, unique = true)
+    private long accountNo;
+
+    @Column(nullable = false)
+    private String accountName;
 
     private double balance;
     private double pending;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
-//    private Set<Statement> statements;
-
-    /**
-     * To make it bidirectional and circumvent JPOA/Hibernate limitations. Account
-     * doesn't need to know about customer per se
-     */
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Customer customer;
-
-    private String accountName;
     /**
      * Lesson: without defining a bidirectional relationship (both in Bank and
      * Account) it fails with collection 'com.robbank.crudApis.model.Bank.accounts'
      * is 'mappedBy' a property named 'bank' which does not exist in the target
      * entity 'com.robbank.crudApis.model.Account'
      * 
+     * Cascade issue, if ALL saving Account will try to persist Bank. So you need a
+     * complete Bank object linked to Account
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "bank_id", referencedColumnName = "id")
     private Bank bank;
+
+    /**
+     * To make it bidirectional and circumvent JPOA/Hibernate limitations. Account
+     * doesn't need to know about customer per se
+     */
+    @ManyToOne()
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
+
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+//    private Set<Statement> statements;
+
+    /**
+     * Required for unit testing org.springframework.orm.jpa.JpaSystemException: No
+     * default constructor for entity '
+     */
+    public Account() {
+
+    }
 
     public Account(final String accountName) {
 
@@ -87,12 +95,12 @@ public class Account implements Serializable {
         this.bank = bank;
     }
 
-    public int getAccountNo() {
+    public long getAccountNo() {
 
         return accountNo;
     }
 
-    public void setAccountNo(int accountNo) {
+    public void setAccountNo(long accountNo) {
 
         this.accountNo = accountNo;
     }
@@ -122,22 +130,22 @@ public class Account implements Serializable {
         this.balance = balance;
     }
 
-    void deposit(double amount) {
+    public void deposit(double amount) {
 
         balance += amount;
     }
 
-    void withdraw(double amount) {// throw OverdraftException{
+    public void withdraw(double amount) {// throw OverdraftException{
 
         balance -= amount;
     }
 
-    double getBalance() {
+    public double getBalance() {
 
         return balance;
     }
 
-    double getAvailableBalance() {
+    public double getAvailableBalance() {
 
         return balance - pending;
     }

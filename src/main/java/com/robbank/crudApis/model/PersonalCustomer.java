@@ -1,20 +1,29 @@
 package com.robbank.crudApis.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 
 @Entity
 public class PersonalCustomer extends Customer {
+//
+//    @Id
+//    @SequenceGenerator(name = "customer_sequence", sequenceName = "customer_sequence", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
+//    private long id;
 
-    @Id
-    @SequenceGenerator(name = "customer_sequence", sequenceName = "customer_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
-    private long id;
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    /**
+     * Required for unit testing org.springframework.orm.jpa.JpaSystemException: No
+     * default constructor for entity '
+     */
+    public PersonalCustomer() {
+
+    }
 
     public PersonalCustomer(String firstName, String lastName) {
 
@@ -22,16 +31,18 @@ public class PersonalCustomer extends Customer {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
-    public long getId() {
-
-        return id;
-    }
-
-    public void setId(long id) {
-
-        this.id = id;
-    }
+//
+//    @Override
+//    public long getId() {
+//
+//        return id;
+//    }
+//
+//    @Override
+//    public void setId(long id) {
+//
+//        this.id = id;
+//    }
 
     public String getFirstName() {
 

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.robbank.crudApis.model.Account;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface SavingsAccount extends JpaRepository<Account, Long> {
 
     Optional<Account> findAccountByAccountNo(final long accountNo);
+//    List<Account> findAccountsByAccountNo(int accountNo);
 }

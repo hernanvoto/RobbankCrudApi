@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 @Entity
 public class CreditAccount extends Account {
 
-    private static final long serialVersionUID = -2202745422583452572L;
-
     private CardType cardType;
     private CardLevel cardLevel;
     private double creditLimit;

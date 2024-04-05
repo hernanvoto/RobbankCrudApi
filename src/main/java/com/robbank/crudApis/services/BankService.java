@@ -1,5 +1,6 @@
 package com.robbank.crudApis.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.robbank.crudApis.model.Bank;
@@ -15,56 +16,20 @@ import com.robbank.crudApis.repositories.BankRepository;
  */
 public class BankService {
 
-    private final BankRepository bankRepository;
+    @Autowired
+    private BankRepository bankRepository;
 
-    public BankService(BankRepository bankRepository) {
+    public BankService() {
 
-        this.bankRepository = bankRepository;
     }
 
-//    public List<Student> getAccounts() {
-//
-//        return robbankApiRepository.findAll();
-//    }
-
-    public void addNewBank(final Bank bank) {
+    public Bank addNewBank(final Bank bank) {
 
         if (bankRepository.findBankByName(bank.getName()).isPresent()) {
 
             throw new IllegalStateException("Bank already exists");
         }
-        bankRepository.save(bank);
+        return bankRepository.save(bank);
     }
 
-//    public void deleteStudent(final Long studentId) {
-//
-//        if (!_studentRepository.existsById(studentId)) {
-//
-//            throw new IllegalStateException("student with id: " + studentId + " doesn't exist");
-//        }
-//        _studentRepository.deleteById(studentId);
-//    }
-//
-//    @Transactional
-//    public void updateStudent(final Long studentId, final String name, final String email) {
-//
-//        Student student = _studentRepository.findById(studentId).orElseThrow(() -> new IllegalStateException(
-//                "student with id: " + studentId + " doesn't exist"));
-//
-//        if (name != null && name.length() > 0 && !Objects.equals(student.getName(), name)) {
-//
-//            student.setName(name);
-//        }
-//
-//        if (email != null && email.length() > 0 && !Objects.equals(student.getEmail(), email)) {
-//
-//            if (_studentRepository.findStudentByEmail(email).isPresent()) {
-//
-//                throw new IllegalStateException("email is taken");
-//            }
-//
-//            student.setEmail(email);
-//        }
-//
-//    }
 }

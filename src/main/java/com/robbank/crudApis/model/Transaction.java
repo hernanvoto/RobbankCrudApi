@@ -1,26 +1,66 @@
 package com.robbank.crudApis.model;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 
-@MappedSuperclass
-public abstract class Transaction implements Serializable {
+@Entity
+public class Transaction {
 
-    private static final long serialVersionUID = 5931143234650699971L;
-
-    private String transactionType;
+    private TransactionType transactionType;
     private LocalDateTime timestamp;
     private String description;
-    private double amount;
+    private double transactionAmount;
 
-    public String getTransactionType() {
+    @Id
+    @SequenceGenerator(name = "transaction_sequence", sequenceName = "transaction_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_sequence")
+    private long id;
+
+    @ManyToOne()
+    @JoinColumn(name = "payee_id", referencedColumnName = "id")
+    private Payee payee;
+
+    @ManyToOne()
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
+
+    private enum TransactionType {
+        DEPOSIT, WITHDRAWAL, TRANSFER, FEE, INTEREST
+    }
+
+    public long getId() {
+
+        return id;
+    }
+
+    public void setId(long id) {
+
+        this.id = id;
+    }
+
+    public Payee getPayee() {
+
+        return payee;
+    }
+
+    public void setPayee(Payee payee) {
+
+        this.payee = payee;
+    }
+
+    public TransactionType getTransactionType() {
 
         return transactionType;
     }
 
-    public void setTransactionType(String transactionType) {
+    public void setTransactionType(TransactionType transactionType) {
 
         this.transactionType = transactionType;
     }
@@ -45,14 +85,52 @@ public abstract class Transaction implements Serializable {
         this.description = description;
     }
 
-    public double getAmount() {
+    public double getTransactionAmount() {
 
-        return amount;
+        return transactionAmount;
     }
 
-    public void setAmount(double amount) {
+    public void setTransactionAmount(double transactionAmount) {
 
-        this.amount = amount;
+        this.transactionAmount = transactionAmount;
     }
+
+    public Account getAccount() {
+
+        return account;
+    }
+
+    public void setAccount(Account account) {
+
+        this.account = account;
+    }
+
+    /**
+     * Payment/Transfer to 3rd party
+     */
+    public void transfer(Payee payee, String description, double transactionAmount) {
+
+        this.transactionType = TransactionType.TRANSFER;
+        this.description = description;
+        this.transactionAmount = transactionAmount;
+        this.payee = payee;
+
+        this.timestamp = timestamp;
+    }
+//    
+//    /**
+//     * Deposit
+//     */
+//    public void deposit(Payee payee, TransactionType transactionType, LocalDateTime timestamp, String description,
+//        double transactionAmount
+//
+//) {
+//
+//    this.transactionType = transactionType;
+//    this.timestamp = timestamp;
+//    this.description = description;
+//    this.transactionAmount = transactionAmount;
+//    this.payee = payee;
+//    }     
 
 }

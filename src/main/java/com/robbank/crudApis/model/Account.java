@@ -1,7 +1,11 @@
 package com.robbank.crudApis.model;
 
+import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,6 +13,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -28,13 +33,16 @@ public abstract class Account {
     private long id;
 
     @Column(nullable = false, unique = true)
-    private long accountNo;
+    private String accountNo;
 
     @Column(nullable = false)
     private String accountName;
 
     private double balance;
     private double pending;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+    private Set<Transaction> transactions;
 
     /**
      * Lesson: without defining a bidirectional relationship (both in Bank and
@@ -57,8 +65,8 @@ public abstract class Account {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
-//    private Set<Statement> statements;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+    private Set<Statement> statements;
 
     /**
      * Required for unit testing org.springframework.orm.jpa.JpaSystemException: No
@@ -73,6 +81,16 @@ public abstract class Account {
         this.accountName = accountName;
         balance = 0;
         pending = 0;
+    }
+
+    public long getId() {
+
+        return id;
+    }
+
+    public void setId(long id) {
+
+        this.id = id;
     }
 
     public Customer getCustomer() {
@@ -95,12 +113,12 @@ public abstract class Account {
         this.bank = bank;
     }
 
-    public long getAccountNo() {
+    public String getAccountNo() {
 
         return accountNo;
     }
 
-    public void setAccountNo(long accountNo) {
+    public void setAccountNo(String accountNo) {
 
         this.accountNo = accountNo;
     }
@@ -149,4 +167,25 @@ public abstract class Account {
 
         return balance - pending;
     }
+
+    public Set<Transaction> getTransaction() {
+
+        return transactions;
+    }
+
+    public void setTransaction(Set<Transaction> transactions) {
+
+        this.transactions = transactions;
+    }
+
+    public Set<Statement> getStatements() {
+
+        return statements;
+    }
+
+    public void setStatements(Set<Statement> statements) {
+
+        this.statements = statements;
+    }
+
 }

@@ -10,7 +10,5 @@ import com.robbank.crudApis.model.Bank;
 @Repository
 public interface BankRepository extends JpaRepository<Bank, Long> {
 
-    Optional<Bank> findBankById(final Long id);
-
     Optional<Bank> findBankByName(final String name);
 }

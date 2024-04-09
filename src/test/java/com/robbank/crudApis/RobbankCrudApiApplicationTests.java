@@ -53,8 +53,8 @@ class RobbankCrudApiApplicationTests {
         ContactDetail cd2 = new ContactDetail("bank2Sec@bank.com", "555-2345", "2 b_fake st Sydney NSW 2000",
                 ContactType.SECONDARY);
 
-        Bank bank1 = new Bank("Bank1", "000001").addContactDetails(cd1);
-        Bank bank2 = new Bank("Bank2", "000002").addContactDetails(cd2);
+        Bank bank1 = new Bank("Bank1", 328596).addContactDetails(cd1);
+        Bank bank2 = new Bank("Bank2", 864565).addContactDetails(cd2);
         // bankController.addNewBank(bank1); bankController.addNewBank(b2);
         bankRepository.saveAll(List.of(bank1, bank2));
 

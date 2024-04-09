@@ -28,12 +28,12 @@ public class AccountNumberGeneratorService {
 //        return latestAccountNumber + 10;
 //    }
 
-    public long generateAccountNumber() {
+    public String generateAccountNumber() {
 
         // Query to retrieve the next value from a sequence and add 10
         Long nextSequenceValue = entityManager.createQuery("SELECT nextval('account_number_sequence')", Long.class)
                 .getSingleResult();
 
-        return nextSequenceValue + 10;
+        return Long.toString(nextSequenceValue + 10);
     }
 }

@@ -1,27 +1,28 @@
 package com.robbank.crudApis.model;
 
-import java.io.Serializable;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 
-@Entity @Table
-public class Payee implements Serializable {
+@Entity @Inheritance(strategy = InheritanceType.JOINED)
+public class Payee {
 
-    private static final long serialVersionUID = -502920575628338651L;
     @Id
-    @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+    @SequenceGenerator(name = "payee_sequence", sequenceName = "payee_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payee_sequence")
     private long id;
-    private String name;
-    private String bankName;
-    private String bsb;
-    private int accountNumber;
-    private String paymentType;
+
+    @ManyToOne()
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
+
+//    public enum PaymentType {   BPAY, PAYID, BANK_TRANSFER  }
 
     public long getId() {
 
@@ -33,53 +34,13 @@ public class Payee implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
+    public Customer getCustomer() {
 
-        return name;
+        return customer;
     }
 
-    public void setName(String name) {
+    public void setCustomer(Customer customer) {
 
-        this.name = name;
-    }
-
-    public String getBankName() {
-
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-
-        this.bankName = bankName;
-    }
-
-    public String getBsb() {
-
-        return bsb;
-    }
-
-    public void setBsb(String bsb) {
-
-        this.bsb = bsb;
-    }
-
-    public int getAccountNumber() {
-
-        return accountNumber;
-    }
-
-    public void setAccountNumber(int accountNumber) {
-
-        this.accountNumber = accountNumber;
-    }
-
-    public String getPaymentType() {
-
-        return paymentType;
-    }
-
-    public void setPaymentType(String paymentType) {
-
-        this.paymentType = paymentType;
+        this.customer = customer;
     }
 }

@@ -38,18 +38,19 @@ public class Bank {
     private Long id;
 
     private String name;
+
     @Column(nullable = false)
-    private String bsb;
+    private int bsb;
 
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
     private Set<ContactDetail> contactDetails;
 
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
     private Set<Account> accounts;
-
-    public enum AccountType {
-        SAVINGS, CREDIT
-    }
+//
+//    public enum AccountType {
+//        SAVINGS, CREDIT
+//    }
 
     /**
      * Required for unit testing org.springframework.orm.jpa.JpaSystemException: No
@@ -59,7 +60,7 @@ public class Bank {
 
     }
 
-    public Bank(final String name, final String bsb) {
+    public Bank(final String name, final int bsb) {
 
         this.name = name;
         this.bsb = bsb;
@@ -85,12 +86,12 @@ public class Bank {
         this.name = name;
     }
 
-    public String getBsb() {
+    public int getBsb() {
 
         return bsb;
     }
 
-    public void setBsb(String bsb) {
+    public void setBsb(int bsb) {
 
         this.bsb = bsb;
     }

@@ -17,10 +17,11 @@ public class Statement {
     @SequenceGenerator(name = "statement_sequence", sequenceName = "statement_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "statement_sequence")
     private long id;
-//    private T account;
+
     private LocalDate starDate;
     private LocalDate endDate;
 //    private List<Transaction> transactions;
+
     @ManyToOne
     @JoinColumn
     private Account account;
@@ -31,11 +32,6 @@ public class Statement {
         this.starDate = starDate;
         this.endDate = endDate;
 //        this.transactions = transactions;
-    }
-
-    public void setAccount(Account account) {
-
-        this.account = account;
     }
 
     public long getId() {
@@ -68,14 +64,14 @@ public class Statement {
         this.endDate = endDate;
     }
 
-//    public List<Transaction> getTransactions() {
-//
-//        return transactions;
-//    }
-//
-//    public void setTransactions(List<Transaction> transactions) {
-//
-//        this.transactions = transactions;
-//    }
+    public Account getAccount() {
+
+        return account;
+    }
+
+    public void setAccount(Account account) {
+
+        this.account = account;
+    }
 
 }

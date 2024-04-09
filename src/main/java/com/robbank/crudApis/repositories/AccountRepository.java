@@ -10,5 +10,5 @@ import com.robbank.crudApis.model.Account;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    Optional<Account> findAccountByAccountNo(final long accountNo);
+    Optional<Account> findAccountByAccountNo(final String accountNo);
 }

@@ -31,12 +31,14 @@ public abstract class Customer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
     private long id;
 
-//    private Set<Payee> payees;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<ContactDetail> contactDetails;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Account> accounts;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Payee> payees;
 
     public long getId() {
 
@@ -98,15 +100,25 @@ public abstract class Customer {
         this.contactDetails = contactDetails;
     }
 
-//    public void setAccounts(Set<Account> accounts) {
-//
-//        this.accounts = accounts;
-//    }
-//
-//    Set<Account> getAccounts() {
-//
-//        return accounts;
-//    }
+    public Set<Account> getAccounts() {
+
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+
+        this.accounts = accounts;
+    }
+
+    public Set<Payee> getPayees() {
+
+        return payees;
+    }
+
+    public void setPayees(Set<Payee> payees) {
+
+        this.payees = payees;
+    }
 
     void openAccount(Account account) {
 

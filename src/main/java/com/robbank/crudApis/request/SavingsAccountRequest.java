@@ -8,6 +8,7 @@ public class SavingsAccountRequest {
     private double interestRate;
     private double minBalance;
     private double initialDeposit;
+    private double overdraftLimit;
 
     public SavingsAccountRequest() {
 
@@ -15,7 +16,7 @@ public class SavingsAccountRequest {
 
     public SavingsAccountRequest(
             final long bankId, final long customerId, final String accountName, final double interestRate,
-            final double minBalance, final double initialDeposit
+            final double minBalance, final double initialDeposit, final double overdraftLimit
     ) {
 
         this.setBankId(bankId);
@@ -24,6 +25,7 @@ public class SavingsAccountRequest {
         this.interestRate = interestRate;
         this.minBalance = minBalance;
         this.initialDeposit = initialDeposit;
+        this.setOverdraftLimit(overdraftLimit);
     }
 
     public String getAccountName() {
@@ -84,5 +86,15 @@ public class SavingsAccountRequest {
     public void setCustomerId(long customerId) {
 
         this.customerId = customerId;
+    }
+
+    public double getOverdraftLimit() {
+
+        return overdraftLimit;
+    }
+
+    public void setOverdraftLimit(double overdraftLimit) {
+
+        this.overdraftLimit = overdraftLimit;
     }
 }

@@ -20,7 +20,7 @@ public class CreditAccount extends Account {
 
     public CreditAccount(final String accountName, final CardType cardType, final CardLevel cardLevel) {
 
-        super(accountName);
+        super(accountName, 0.0);
         this.setCardType(cardType);
         this.setCardLevel(cardLevel);
     }

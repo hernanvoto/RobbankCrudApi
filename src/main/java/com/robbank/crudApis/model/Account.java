@@ -1,6 +1,9 @@
 package com.robbank.crudApis.model;
 
+import java.util.HashSet;
 import java.util.Set;
+
+import com.robbank.crudApis.exceptions.OverdraftException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,6 +43,7 @@ public abstract class Account {
 
     private double balance;
     private double pending;
+    private double overdraftLimit;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
     private Set<Transaction> transactions;
@@ -76,11 +80,12 @@ public abstract class Account {
 
     }
 
-    public Account(final String accountName) {
+    public Account(final String accountName, final double overdraftLimit) {
 
         this.accountName = accountName;
         balance = 0;
         pending = 0;
+        this.overdraftLimit = overdraftLimit;
     }
 
     public long getId() {
@@ -153,9 +158,15 @@ public abstract class Account {
         balance += amount;
     }
 
-    public void withdraw(double amount) {// throw OverdraftException{
+    public double withdraw(double amount) throws OverdraftException {
 
+        if (amount > balance + overdraftLimit) {
+
+            throw new OverdraftException("Overdraft limit exceeded.");
+        }
         balance -= amount;
+
+        return balance;
     }
 
     public double getBalance() {
@@ -178,6 +189,15 @@ public abstract class Account {
         this.transactions = transactions;
     }
 
+    public void addTransaction(Transaction transaction) {
+
+        if (this.transactions == null) {
+
+            this.transactions = new HashSet<>();
+        }
+        this.transactions.add(transaction);
+    }
+
     public Set<Statement> getStatements() {
 
         return statements;
@@ -186,6 +206,24 @@ public abstract class Account {
     public void setStatements(Set<Statement> statements) {
 
         this.statements = statements;
+    }
+
+    public void addStatement(Statement statement) {
+
+        if (this.statements == null) {
+
+            this.statements = new HashSet<>();
+        }
+        this.statements.add(statement);
+    }
+
+    @Override
+    public String toString() {
+
+        return "Account{" + "id=" + id + ", accountNo='" + accountNo + '\'' + ", accountName='" + accountName + '\''
+                + ", balance=" + balance + ", pending=" + pending + ", overdraftLimit=" + overdraftLimit
+                + ", transactions=" + transactions + ", bank=" + bank + ", customer=" + customer + ", statements="
+                + statements + '}';
     }
 
 }

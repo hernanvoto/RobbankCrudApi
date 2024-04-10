@@ -31,7 +31,7 @@ public class Transaction {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    private enum TransactionType {
+    public enum TransactionType {
         DEPOSIT, WITHDRAWAL, TRANSFER, FEE, INTEREST
     }
 
@@ -104,33 +104,5 @@ public class Transaction {
 
         this.account = account;
     }
-
-    /**
-     * Payment/Transfer to 3rd party
-     */
-    public void transfer(Payee payee, String description, double transactionAmount) {
-
-        this.transactionType = TransactionType.TRANSFER;
-        this.description = description;
-        this.transactionAmount = transactionAmount;
-        this.payee = payee;
-
-        this.timestamp = timestamp;
-    }
-//    
-//    /**
-//     * Deposit
-//     */
-//    public void deposit(Payee payee, TransactionType transactionType, LocalDateTime timestamp, String description,
-//        double transactionAmount
-//
-//) {
-//
-//    this.transactionType = transactionType;
-//    this.timestamp = timestamp;
-//    this.description = description;
-//    this.transactionAmount = transactionAmount;
-//    this.payee = payee;
-//    }     
 
 }

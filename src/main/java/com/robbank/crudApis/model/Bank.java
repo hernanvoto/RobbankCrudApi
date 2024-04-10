@@ -20,6 +20,9 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Transient;
 
 @Entity
+/**
+ * Entity useful in case of multiple Bank client implementations
+ */
 public class Bank {
 
     /**

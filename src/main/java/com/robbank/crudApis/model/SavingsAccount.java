@@ -16,11 +16,15 @@ public class SavingsAccount extends Account {
 
     }
 
-    public SavingsAccount(final String accountName, final double interestRate, final double minimumBalance) {
+    public SavingsAccount(
+            final String accountName, final double interestRate, final double minimumBalance,
+            final double overdraftLimit
+    ) {
 
-        super(accountName);
+        super(accountName, overdraftLimit);
         this.interestRate = interestRate;
         this.minimumBalance = minimumBalance;
+
     }
 
     public double getInterestRate() {

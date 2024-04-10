@@ -37,7 +37,7 @@ public class AccountController {
         double initialDeposit = request.getInitialDeposit();
 
         SavingsAccount savingsAccount = accountService.createSavingsAccount(bankId, customerId, accountName,
-                interestRate, minBalance, Optional.ofNullable(initialDeposit));
+                interestRate, minBalance, Optional.ofNullable(initialDeposit), request.getOverdraftLimit());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savingsAccount);
     }

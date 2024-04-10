@@ -10,6 +10,10 @@ public class BankTransferPayee extends Payee {
     private int bsb;
     private String accountNumber;
 
+    public BankTransferPayee() {
+
+    }
+
     public BankTransferPayee(Customer customer, String payeeName, String bankName, int bsb, String accountNumber) {
 
         setCustomer(customer);

@@ -34,7 +34,8 @@ public class AccountService {
             String accountName,
             double interestRate,
             double minBalance,
-            Optional<Double> initialDeposit
+            Optional<Double> initialDeposit,
+            double overdraftLimit
     ) {
 
         // Retrieve bank and customer entities from repositories
@@ -42,7 +43,7 @@ public class AccountService {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new IllegalArgumentException(
                 "Customer not found"));
 
-        Account account = new SavingsAccount(accountName, interestRate, minBalance);
+        Account account = new SavingsAccount(accountName, interestRate, minBalance, overdraftLimit);
         account.setBank(bank);
         account.setCustomer(customer);
 

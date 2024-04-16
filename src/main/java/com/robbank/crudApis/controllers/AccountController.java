@@ -11,8 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.robbank.crudApis.model.Account;
+import com.robbank.crudApis.model.CreditAccount;
+import com.robbank.crudApis.model.CreditAccount.CardLevel;
+import com.robbank.crudApis.model.CreditAccount.CardType;
 import com.robbank.crudApis.model.SavingsAccount;
+import com.robbank.crudApis.model.TransactionAccount;
+import com.robbank.crudApis.request.CreditAccountRequest;
 import com.robbank.crudApis.request.SavingsAccountRequest;
+import com.robbank.crudApis.request.TransactionAccountRequest;
 import com.robbank.crudApis.services.AccountService;
 
 @RestController @RequestMapping(path = "api/v1/robbankapi/account")
@@ -26,20 +32,47 @@ public class AccountController {
     }
 
     @PostMapping("/savings")
-    public ResponseEntity<Account> createSavingsAccount(@RequestBody SavingsAccountRequest request) {
+    public ResponseEntity<SavingsAccount> createSavingsAccount(@RequestBody SavingsAccountRequest request) {
 
         // Convert request parameters to appropriate types
-        long bankId = request.getBankId();
+//        long bankId = request.getBankId();
         long customerId = request.getCustomerId();
         String accountName = request.getAccountName();
         double interestRate = request.getInterestRate();
-        double minBalance = request.getMinBalance();
         double initialDeposit = request.getInitialDeposit();
 
-        SavingsAccount savingsAccount = accountService.createSavingsAccount(bankId, customerId, accountName,
-                interestRate, minBalance, Optional.ofNullable(initialDeposit), request.getOverdraftLimit());
+        SavingsAccount savingsAccount = accountService.createSavingsAccount(customerId, accountName, interestRate,
+                Optional.ofNullable(initialDeposit));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savingsAccount);
     }
 
+    @PostMapping("/transaction")
+    public ResponseEntity<TransactionAccount> createTransactionAccount(@RequestBody TransactionAccountRequest request) {
+
+        long customerId = request.getCustomerId();
+        String accountName = request.getAccountName();
+        double minBalance = request.getMinBalance();
+        double initialDeposit = request.getInitialDeposit();
+
+        TransactionAccount transactionAccount = accountService.createTransactionAccount(customerId, accountName,
+                minBalance, Optional.ofNullable(initialDeposit), request.getOverdraftLimit());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionAccount);
+    }
+
+    @PostMapping("/credit")
+    public ResponseEntity<Account> createCreditAccount(@RequestBody CreditAccountRequest request) {
+
+        long customerId = request.getCustomerId();
+        String accountName = request.getAccountName();
+        double creditLimit = request.getCreditLimit();
+        CardLevel cardLevel = request.getCardLevel();
+        CardType cardType = request.getCardType();
+
+        CreditAccount creditAccount = accountService.createCreditAccount(customerId, accountName, creditLimit,
+                cardLevel, cardType);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(creditAccount);
+    }
 }

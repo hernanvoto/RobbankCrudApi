@@ -18,9 +18,12 @@ public class CreditAccount extends Account {
 
     }
 
-    public CreditAccount(final String accountName, final CardType cardType, final CardLevel cardLevel) {
+    public CreditAccount(
+            final String accountName, final double creditLimit, final CardType cardType, final CardLevel cardLevel
+    ) {
 
-        super(accountName, 0.0);
+        super(accountName);
+        this.creditLimit = creditLimit;
         this.setCardType(cardType);
         this.setCardLevel(cardLevel);
     }

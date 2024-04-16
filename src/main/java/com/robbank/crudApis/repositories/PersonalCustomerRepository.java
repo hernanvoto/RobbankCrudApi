@@ -11,4 +11,5 @@ import com.robbank.crudApis.model.PersonalCustomer;
 public interface PersonalCustomerRepository extends JpaRepository<PersonalCustomer, Long> {
 
     Optional<PersonalCustomer> findByFirstNameAndLastName(final String firstName, final String lastName);
+
 }

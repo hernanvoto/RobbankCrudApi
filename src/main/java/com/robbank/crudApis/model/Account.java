@@ -3,6 +3,8 @@ package com.robbank.crudApis.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.robbank.crudApis.exceptions.OverdraftException;
 
 import jakarta.persistence.CascadeType;
@@ -20,22 +22,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-/**
- * Lesson: For mysterious reasons, implements Serializable is neeed if not:
- * Error creating bean with name 'entityManagerFactory' defined in class path
- * resource
- * [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]:
- * Could not determine recommended JdbcType for Java type
- * 'com.robbank.crudApis.model.Account'
- */
+
 public abstract class Account {
 
     @Id
     @SequenceGenerator(name = "account_sequence", sequenceName = "account_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_sequence")
-    private long id;
+    private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private String accountNo;
 
     @Column(nullable = false)
@@ -45,6 +40,7 @@ public abstract class Account {
     private double pending;
     private double overdraftLimit;
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
     private Set<Transaction> transactions;
 
@@ -57,18 +53,20 @@ public abstract class Account {
      * Cascade issue, if ALL saving Account will try to persist Bank. So you need a
      * complete Bank object linked to Account
      */
-    @ManyToOne()
-    @JoinColumn(name = "bank_id", referencedColumnName = "id")
-    private Bank bank;
+//    @ManyToOne()
+//    @JoinColumn(name = "bank_id", referencedColumnName = "id")
+//    private Bank bank;
 
     /**
      * To make it bidirectional and circumvent JPOA/Hibernate limitations. Account
      * doesn't need to know about customer per se
      */
+    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
     private Set<Statement> statements;
 
@@ -80,20 +78,19 @@ public abstract class Account {
 
     }
 
-    public Account(final String accountName, final double overdraftLimit) {
+    public Account(final String accountName) {
 
         this.accountName = accountName;
         balance = 0;
         pending = 0;
-        this.overdraftLimit = overdraftLimit;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }
@@ -106,16 +103,6 @@ public abstract class Account {
     public void setCustomer(Customer customer) {
 
         this.customer = customer;
-    }
-
-    public Bank getBank() {
-
-        return bank;
-    }
-
-    public void setBank(Bank bank) {
-
-        this.bank = bank;
     }
 
     public String getAccountNo() {
@@ -179,12 +166,12 @@ public abstract class Account {
         return balance - pending;
     }
 
-    public Set<Transaction> getTransaction() {
+    public Set<Transaction> getTransactions() {
 
         return transactions;
     }
 
-    public void setTransaction(Set<Transaction> transactions) {
+    public void setTransactions(Set<Transaction> transactions) {
 
         this.transactions = transactions;
     }
@@ -222,8 +209,9 @@ public abstract class Account {
 
         return "Account{" + "id=" + id + ", accountNo='" + accountNo + '\'' + ", accountName='" + accountName + '\''
                 + ", balance=" + balance + ", pending=" + pending + ", overdraftLimit=" + overdraftLimit
-                + ", transactions=" + transactions + ", bank=" + bank + ", customer=" + customer + ", statements="
-                + statements + '}';
+                + ", transactions=" + transactions
+                // + ", bank=" + bank
+                + ", customer=" + customer + ", statements=" + statements + '}';
     }
 
 }

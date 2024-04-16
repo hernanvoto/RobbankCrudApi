@@ -5,8 +5,7 @@ import jakarta.persistence.Entity;
 @Entity
 public class SavingsAccount extends Account {
 
-    private double interestRate;
-    private double minimumBalance;
+    private double savingsInterestRate;
 
     /**
      * Required for unit testing org.springframework.orm.jpa.JpaSystemException: No
@@ -16,35 +15,20 @@ public class SavingsAccount extends Account {
 
     }
 
-    public SavingsAccount(
-            final String accountName, final double interestRate, final double minimumBalance,
-            final double overdraftLimit
-    ) {
+    public SavingsAccount(final String accountName, final double savingsInterestRate) {
 
-        super(accountName, overdraftLimit);
-        this.interestRate = interestRate;
-        this.minimumBalance = minimumBalance;
-
+        super(accountName);
+        this.savingsInterestRate = savingsInterestRate;
     }
 
-    public double getInterestRate() {
+    public double getSavingsInterestRate() {
 
-        return interestRate;
+        return savingsInterestRate;
     }
 
-    public void setInterestRate(double interestRate) {
+    public void setSavingsInterestRate(double savingsInterestRate) {
 
-        this.interestRate = interestRate;
-    }
-
-    public double getMinimumBalance() {
-
-        return minimumBalance;
-    }
-
-    public void setMinimumBalance(double minimumBalance) {
-
-        this.minimumBalance = minimumBalance;
+        this.savingsInterestRate = savingsInterestRate;
     }
 
 }

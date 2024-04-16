@@ -3,8 +3,11 @@ package com.robbank.crudApis.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,14 +34,23 @@ public abstract class Customer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
     private long id;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<ContactDetail> contactDetails;
+    private Set<ContactDetails> contactDetails;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Payee> payees;
+
+    public enum CustomerType {
+        BUSINESS, PERSONAL
+    }
+
+    private CustomerType customerType;
 
     public long getId() {
 
@@ -50,24 +62,14 @@ public abstract class Customer {
         this.id = id;
     }
 
-//    public Set<Payee> getPayees() {
-//
-//        return payees;
-//    }
-//
-//    public void setPayees(Set<Payee> payees) {
-//
-//        this.payees = payees;
-//    }
-
-    public void addContactDetails(ContactDetail... contactDetails) {
+    public void addContactDetails(ContactDetails... contactDetails) {
 
         if (this.contactDetails == null) {
 
             this.contactDetails = new HashSet<>();
         }
 
-        for (ContactDetail contactDetail : contactDetails) {
+        for (ContactDetails contactDetail : contactDetails) {
 
             this.contactDetails.add(contactDetail);
             contactDetail.setCustomer(this); // Make sure to set the back reference
@@ -90,12 +92,12 @@ public abstract class Customer {
         }
     }
 
-    public Set<ContactDetail> getContactDetails() {
+    public Set<ContactDetails> getContactDetails() {
 
         return contactDetails;
     }
 
-    public void setContactDetails(Set<ContactDetail> contactDetails) {
+    public void setContactDetails(Set<ContactDetails> contactDetails) {
 
         this.contactDetails = contactDetails;
     }
@@ -120,12 +122,14 @@ public abstract class Customer {
         this.payees = payees;
     }
 
-    void openAccount(Account account) {
+    public CustomerType getCustomerType() {
 
+        return customerType;
     }
 
-    void closeAccount(Account account) {
+    public void setCustomerType(CustomerType customerType) {
 
+        this.customerType = customerType;
     }
 
 }

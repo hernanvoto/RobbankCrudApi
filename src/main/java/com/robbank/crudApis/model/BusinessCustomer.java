@@ -5,22 +5,30 @@ import jakarta.persistence.Entity;
 @Entity
 public class BusinessCustomer extends Customer {
 
-//
-//    @Id
-//    @SequenceGenerator(name = "customer_sequence", sequenceName = "customer_sequence", allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
-//    private long id;
     private String abn;
-//
-//    public long getId() {
-//
-//        return id;
-//    }
-//
-//    public void setId(long id) {
-//
-//        this.id = id;
-//    }
+    private String name;
+
+    public BusinessCustomer() {
+
+        setCustomerType(CustomerType.BUSINESS);
+    }
+
+    public BusinessCustomer(final String abn, final String name) {
+
+        setCustomerType(CustomerType.BUSINESS);
+        this.abn = abn;
+        this.name = name;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+
+    public void setName(String name) {
+
+        this.name = name;
+    }
 
     public String getAbn() {
 

@@ -1,6 +1,6 @@
 package com.robbank.crudApis.model;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -12,9 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
-public class ContactDetail implements Serializable {
-
-    private static final long serialVersionUID = 9034367072319942527L;
+public class ContactDetails {
 
     @Id
     @SequenceGenerator(name = "contactdetail_sequence", sequenceName = "contactdetail_sequence", allocationSize = 1)
@@ -26,20 +24,21 @@ public class ContactDetail implements Serializable {
     private String address;
 
     /**
-     * To make it bidirectional and circumvent JPOA/Hibernate limitations.
+     * To make it bidirectional and circumvent JPA/Hibernate limitations.
      * ContactDetail doesn't need to know about Customer
      */
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @JsonBackReference
     private Customer customer;
 
     /**
-     * To make it bidirectional and circumvent JPOA/Hibernate limitations.
+     * To make it bidirectional and circumvent JPA/Hibernate limitations.
      * ContactDetail doesn't need to know about bank
      */
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bank_id", referencedColumnName = "id")
-    private Bank bank;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "bank_id", referencedColumnName = "id")
+//    private Bank bank;
 
     private ContactType type;
 
@@ -47,14 +46,23 @@ public class ContactDetail implements Serializable {
         PRIMARY, SECONDARY
     }
 
-    public ContactDetail(final String email, final String phoneNo, final ContactType contactType) {
+    /**
+     * Needed to avoid: There was an unexpected error (type=Internal Server Error,
+     * status=500). Could not write JSON: No default constructor for entity
+     * 'com.robbank.crudApis.model.ContactDetail'
+     */
+    public ContactDetails() {
+
+    }
+
+    public ContactDetails(final String email, final String phoneNo, final ContactType contactType) {
 
         this.email = email;
         this.setPhoneNo(phoneNo);
         this.type = contactType;
     }
 
-    public ContactDetail(
+    public ContactDetails(
             final String email, final String phoneNo, final String address, final ContactType contactType
     ) {
 
@@ -122,16 +130,6 @@ public class ContactDetail implements Serializable {
     public void setCustomer(Customer customer) {
 
         this.customer = customer;
-    }
-
-    public Bank getBank() {
-
-        return bank;
-    }
-
-    public void setBank(Bank bank) {
-
-        this.bank = bank;
     }
 
 }

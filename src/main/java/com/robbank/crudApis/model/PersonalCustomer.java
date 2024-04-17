@@ -1,20 +1,17 @@
 package com.robbank.crudApis.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 @Entity
 public class PersonalCustomer extends Customer {
-//
-//    @Id
-//    @SequenceGenerator(name = "customer_sequence", sequenceName = "customer_sequence", allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
-//    private long id;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String firstName;
 
-    @Column(nullable = false)
+    /**
+     * if set as nullable, Business Cusomter saving fails
+     */
+//    @Column(nullable = false)
     private String lastName;
 
     /**
@@ -23,26 +20,16 @@ public class PersonalCustomer extends Customer {
      */
     public PersonalCustomer() {
 
+        setCustomerType(CustomerType.PERSONAL);
     }
 
     public PersonalCustomer(String firstName, String lastName) {
 
         super();
+        setCustomerType(CustomerType.PERSONAL);
         this.firstName = firstName;
         this.lastName = lastName;
     }
-//
-//    @Override
-//    public long getId() {
-//
-//        return id;
-//    }
-//
-//    @Override
-//    public void setId(long id) {
-//
-//        this.id = id;
-//    }
 
     public String getFirstName() {
 

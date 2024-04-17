@@ -6,18 +6,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.robbank.crudApis.model.Bank;
 import com.robbank.crudApis.model.BankTransferPayee;
 import com.robbank.crudApis.model.BpayPayee;
-import com.robbank.crudApis.model.ContactDetail;
-import com.robbank.crudApis.model.ContactDetail.ContactType;
+import com.robbank.crudApis.model.BusinessCustomer;
+import com.robbank.crudApis.model.ContactDetails;
+import com.robbank.crudApis.model.ContactDetails.ContactType;
 import com.robbank.crudApis.model.Payee;
 import com.robbank.crudApis.model.PersonalCustomer;
 import com.robbank.crudApis.model.Transaction;
 import com.robbank.crudApis.repositories.AccountRepository;
-import com.robbank.crudApis.repositories.BankRepository;
+import com.robbank.crudApis.repositories.CustomerRepository;
 import com.robbank.crudApis.repositories.PayeeRepository;
-import com.robbank.crudApis.repositories.PersonalCustomerRepository;
 import com.robbank.crudApis.services.AccountService;
 import com.robbank.crudApis.services.TransactionService;
 
@@ -33,8 +32,7 @@ public class RobbankApiConfig {
      */
     @Bean
     CommandLineRunner commandLineRunner(
-            BankRepository bankRepository,
-            PersonalCustomerRepository personalCustomerRepository,
+            CustomerRepository customerRepository,
             AccountRepository accountRepository,
             AccountService accountService,
             TransactionService transactionService,
@@ -46,35 +44,32 @@ public class RobbankApiConfig {
             /** SAMPLE DATA FOR TEST **/
 
             /** Create ROBBANK Bank Contact Details **/
-            ContactDetail cd1 = new ContactDetail("robbankapp@gmail.com", "02555-1234",
-                    "1 Fake St Sydney NSW 2000 Australia", ContactType.PRIMARY);
+//            ContactDetail cd1 = new ContactDetail("robbankapp@gmail.com", "02555-1234",
+//                    "1 Fake St Sydney NSW 2000 Australia", ContactType.PRIMARY);
 
             /** Create Bank Details **/
-            Bank bank = new Bank("ROBBANK", 0123456).addContactDetails(cd1);
-            bankRepository.save(bank);
+//            Bank bank = new Bank("ROBBANK", 0123456).addContactDetails(cd1);
+//            bankRepository.save(bank);
 
             /***********************************
              * Create Personal Customer Xavier
              */
             PersonalCustomer xavier = new PersonalCustomer("Xavier", "Xmen");
-            cd1 = new ContactDetail("xavier@customer.com", "444-1234", "11 c_fake st Sydney NSW 2000",
+            ContactDetails cd1 = new ContactDetails("xavier@customer.com", "444-1234", "11 c_fake st Sydney NSW 2000",
                     ContactType.PRIMARY);
-            ContactDetail cd2 = new ContactDetail("xavier2@customer.com", "444-2345", "21 c_fake st Sydney NSW 2000",
+            ContactDetails cd2 = new ContactDetails("xavier2@customer.com", "444-2345", "21 c_fake st Sydney NSW 2000",
                     ContactType.SECONDARY);
 
             /** Add PC Contact Details **/
             xavier.addContactDetails(cd1, cd2);
-            personalCustomerRepository.save(xavier);
+            customerRepository.save(xavier);
 
             final double interestRate = 5.0;
-            final double minimumBalanceAllowed = 0.0;
             double initialDeposit = 1000.0;
-            double overdraftLimit = 0.0;
 
-            /** Create Saving Account for xavier - link bank PC and account **/
-            accountService.createSavingsAccount(bank.getId(), xavier.getId(), xavier.getFirstName() + " " + xavier
-                    .getLastName() + " Account", interestRate, minimumBalanceAllowed, Optional.ofNullable(
-                            initialDeposit), overdraftLimit);
+            /** Create Saving Account for Xavier - link bank PC and account **/
+            accountService.createSavingsAccount(xavier.getId(), xavier.getFirstName() + " " + xavier.getLastName()
+                    + " Account", interestRate, Optional.ofNullable(initialDeposit));
 
             /** Create Payees for Xavier **/
             /** BPAY **/
@@ -104,17 +99,16 @@ public class RobbankApiConfig {
              * Create Personal Customer Marla *
              ***********************************/
             PersonalCustomer marla = new PersonalCustomer("Marla", "Seinfeld");
-            cd1 = new ContactDetail("marla@customer.com", "444-1234", "1 d_fake st Sydney NSW 2000",
+            cd1 = new ContactDetails("marla@customer.com", "444-1234", "1 d_fake st Sydney NSW 2000",
                     ContactType.PRIMARY);
 
             /** Add PC Contact Details **/
             marla.addContactDetails(cd1);
-            personalCustomerRepository.save(marla);
+            customerRepository.save(marla);
 
             /** Create Saving Account for Marla - link bank PC and account **/
-            accountService.createSavingsAccount(bank.getId(), marla.getId(), marla.getFirstName() + " " + marla
-                    .getLastName() + " Account", interestRate, minimumBalanceAllowed, Optional.ofNullable(
-                            initialDeposit), overdraftLimit);
+            accountService.createSavingsAccount(marla.getId(), marla.getFirstName() + " " + marla.getLastName()
+                    + " Account", interestRate, Optional.ofNullable(initialDeposit));
 
             /** Create Payees for Marla **/
             /** Bank Transfer **/
@@ -127,6 +121,25 @@ public class RobbankApiConfig {
                     jerryAccountNumber);
             jerryPayee = payeeRepository.save(jerryPayee);
 
+            /***********************************
+             * Create Business Customer Rob Computing PTY LTD*
+             ***********************************/
+            BusinessCustomer robcomputing = new BusinessCustomer("01234567891", "Rob Computing PTY LTD");
+            cd1 = new ContactDetails("robcomputing@business_customer.com", "111-1234", "1 monaco st Sydney NSW 5245",
+                    ContactType.PRIMARY);
+
+            /** Add PC Contact Details **/
+            robcomputing.addContactDetails(cd1);
+            customerRepository.save(robcomputing);
+
+            double minimumBalanceAllowedBuss = 0.0;
+            initialDeposit = 10000.0;
+            double overdraftLimit = 1000.0;
+
+            /** Create Account for - link bank c and account **/
+            accountService.createTransactionAccount(robcomputing.getId(), robcomputing.getName()
+                    + " - Business Account", minimumBalanceAllowedBuss, Optional.ofNullable(initialDeposit),
+                    overdraftLimit);
         };
     }
 

@@ -5,14 +5,19 @@ import jakarta.persistence.Entity;
 @Entity
 public class TransactionAccount extends Account {
 
-    public TransactionAccount(final String accountName, final double overdraftLimit) {
+    double minimumBalance;
+    double overdraftLimit;
 
-        super(accountName, overdraftLimit);
+    public TransactionAccount() {
+
     }
 
-    private static final long serialVersionUID = -6709693105591150713L;
+    public TransactionAccount(final String accountName, final double minimumBalance, final double overdraftLimit) {
 
-    private double overdraftLimit;
+        super(accountName);
+
+        this.overdraftLimit = overdraftLimit;
+    }
 
     public double getOverdraftLimit() {
 
@@ -24,7 +29,14 @@ public class TransactionAccount extends Account {
         this.overdraftLimit = overdraftLimit;
     }
 
-    void executeTransaction(Account fromAccount, Account toAccountNo, double amount) {
+    public double getMinimumBalance() {
 
+        return minimumBalance;
     }
+
+    public void setMinimumBalance(double minimumBalance) {
+
+        this.minimumBalance = minimumBalance;
+    }
+
 }

@@ -9,6 +9,10 @@ public class BpayPayee extends Payee {
     private String ref;
     private String billerName;
 
+    public BpayPayee() {
+
+    }
+
     public BpayPayee(Customer customer, String billerCode, String ref, String billerName) {
 
         setCustomer(customer);

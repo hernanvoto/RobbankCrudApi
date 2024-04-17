@@ -2,6 +2,8 @@ package com.robbank.crudApis.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,10 +25,12 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_sequence")
     private long id;
 
+    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "payee_id", referencedColumnName = "id")
     private Payee payee;
 
+    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;

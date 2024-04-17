@@ -34,6 +34,7 @@ public class AccountNumberGeneratorService {
         Long nextSequenceValue = entityManager.createQuery("SELECT nextval('account_number_sequence')", Long.class)
                 .getSingleResult();
 
-        return Long.toString(nextSequenceValue + 10);
+        return String.format("%08d", nextSequenceValue + 10);
+
     }
 }

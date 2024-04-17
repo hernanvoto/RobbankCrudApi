@@ -1,5 +1,7 @@
 package com.robbank.crudApis.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +20,7 @@ public class Payee {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payee_sequence")
     private long id;
 
+    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
